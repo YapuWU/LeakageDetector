@@ -8,7 +8,7 @@ project(LeakageDetector)
 
 set(CMAKE_BUILD_TYPE RELEASE)
 
-add_compile_definitions(F_CPU=9600000L)
+add_compile_definitions(F_CPU=1200000L)
 add_compile_definitions(BAUD=9600)
 include_directories("D:\\DevLib\\AVRMCU\\avr-libstdcpp-master\\include")
 
