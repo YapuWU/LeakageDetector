@@ -10,7 +10,7 @@ set(CMAKE_BUILD_TYPE RELEASE)
 
 add_compile_definitions(F_CPU=1200000L)
 add_compile_definitions(BAUD=9600)
-include_directories("D:\\DevLib\\AVRMCU\\avr-libstdcpp-master\\include")
+include_directories("F:\\temp\\avr-libstdcpp-master\\include")
 
 add_avr_exec(detector ${MCUTYPE})
 target_sources(detector PRIVATE main.cpp)

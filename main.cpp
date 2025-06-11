@@ -3,6 +3,8 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include <avr/sleep.h>
+#include <avr/wdt.h>
+#include <avr/power.h>
 #include <stdio.h>
 #define PINLED    PB3
 
@@ -19,8 +21,7 @@
 
 ISR(WDT_vect)
 {
-    //Do nothing in watchdog interrupt
-    //This is used to wake up from sleep mode
+    wdt_reset(); // Reset watchdog timer
 }
 
 void init_buzzer()
@@ -55,18 +56,12 @@ bool IsLeaking()
 void init_watchdog()
 {
     cli();
-    
+    wdt_reset(); // Reset watchdog timer
     WDTCR = (1 << WDCE) | (1 << WDE); // Enable watchdog change
-    WDTCR |= (1 << WDTIE) | (1<<WDTIE) | (1 << WDP3) | (0 << WDP2) | (0 << WDP1) | (0 << WDP0); // Enable watchdog interrupt
+    WDTCR = (1 << WDTIE) | (1<<WDTIE) | (1 << WDP3) | (0 << WDP2) | (0 << WDP1) | (0 << WDP0); // Enable watchdog interrupt
     sei();
 }
 
-inline void DisableBOD()
-{
-    // Disable brown-out detection
-    BODCR = (1 << BODS) | (1 << BODSE); // Enable brown-out detection sleep mode
-    BODCR = (1 << BODS); // Disable brown-out detection
-}
 
 int main()
 {
@@ -84,7 +79,7 @@ int main()
         // entering powder down mode to save power
         set_sleep_mode(SLEEP_MODE_PWR_DOWN);
         sleep_enable();
-        DisableBOD(); // Disable brown-out detection to save power
+        sleep_bod_disable(); // Disable brown-out detection during sleep
         sleep_cpu();     // Enter power down mode
         sleep_disable(); // Wake up from power down mode
 
