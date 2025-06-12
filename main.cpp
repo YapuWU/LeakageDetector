@@ -43,9 +43,10 @@ bool IsLeakageDetected()
     
     return leakageDetected; 
 }
+
 FUSES = 
 {
-    .low = LFUSE_DEFAULT,
+    .low = FUSE_SPIEN & FUSE_CKDIV8 & FUSE_CKSEL1 & FUSE_SUT0,
     .high = HFUSE_DEFAULT
 };
 

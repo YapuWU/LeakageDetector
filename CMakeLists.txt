@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 
 
 set(MCUTYPE attiny13a)
+#set(MCUTYPE atmega328p)
 include(./AVR8ToolChain.cmake)
 project(LeakageDetector)
 

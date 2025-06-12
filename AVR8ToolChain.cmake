@@ -33,14 +33,14 @@ get_filename_component(AVR_INC_PATH "${COMPILERPATH}/../avr/include" ABSOLUTE)
 
 
 # Set the flags for AVR8 platform
-set(CMAKE_CXX_FLAGS "${FLAGS}")
-set(CMAKE_C_FLAGS "${FLAGS}" )
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FLAGS}")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${FLAGS}" )
 #add_link_options("-Wl,-gc-sections")
+
+
 
 function(add_avr_exec execFile mcuType)
 add_executable(${execFile} "")
-
-
 # 
 set_target_properties(${execFile} PROPERTIES OUTPUT_NAME ${execFile}.elf)
 
