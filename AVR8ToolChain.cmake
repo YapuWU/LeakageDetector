@@ -44,14 +44,15 @@ add_executable(${execFile} "")
 # 
 set_target_properties(${execFile} PROPERTIES OUTPUT_NAME ${execFile}.elf)
 
-#add_custom_command(
-#   TARGET ${execFile} 
-#   COMMAND avr-strip ${execFile}.elf)
+# add_custom_command(
+#    TARGET ${execFile} 
+#    POST_BUILD
+#    COMMAND avr-strip ${execFile}.elf)
 
 add_custom_command(
     TARGET ${execFile}
     POST_BUILD
-    COMMAND avr-objcopy -j .text -j .data -O ihex ${execFile}.elf ${execFile}.hex 
+    COMMAND ${AVR_OBJCOPY} -j .text -j .data -O ihex ${execFile}.elf ${execFile}.hex 
 )
 
 # create lst file after build
@@ -70,6 +71,13 @@ add_custom_command(
          ${AVR_OBJCOPY} -j .eeprom --set-section-flags=.eeprom=alloc,load
             --change-section-lma .eeprom=0 --no-change-warnings
             -O ihex ${execFile}.elf ${execFile}-eeprom.hex
+   )
+#extract FUSE settings
+add_custom_command(
+      TARGET ${execFile}
+      POST_BUILD
+      COMMAND
+         ${AVR_OBJCOPY} -j .fuse -O ihex ${execFile}.elf ${execFile}.fuse
    )
 
 #display size
