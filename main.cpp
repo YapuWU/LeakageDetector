@@ -7,7 +7,7 @@
 #include <avr/power.h>
 #include <avr/cpufunc.h>
 
-#define PIN_LED    PB3
+#define PIN_LED    PB5
 #define PIN_BUZZER PB4
 
 #define TurnOnLED()     (PORTB |= (1 << PIN_LED))    
@@ -17,15 +17,19 @@
 
 ISR(WDT_vect)
 {
-    _WD_CONTROL_REG |= _BV(WDTIE); // Re-enable WDT interrupt
+    
 }
 
 void EnableWDTAndSleep(uint8_t timeout)
 {
     wdt_enable(timeout);
-    _WD_CONTROL_REG |= _BV(WDTIE);       // Enable WDT interrupt
+    sei();
+    _WD_CONTROL_REG |= _BV(WDIE);       // Enable WDT interrupt
     set_sleep_mode(SLEEP_MODE_PWR_DOWN); 
-    sleep_enable();                      
+    sleep_enable();     
+    sleep_cpu();         // Enter sleep mode    
+    sleep_disable();    // Wake up from sleep
+    _WD_CONTROL_REG |= _BV(WDIE); // Re-enable WDT interrupt             
 }
 
 bool IsLeakageDetected()
@@ -69,9 +73,7 @@ int main()
     
     TurnOffBuzzer();
     TurnOffLED();
-
-    set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-    sleep_enable(); 
+   
     while (true)
     {
         // Sleep 4 Seconds before checking the leakage
@@ -93,9 +95,9 @@ int main()
         }
 
         // Flash LED to indicate activity
-        TurnOnLED();
-        EnableWDTAndSleep(WDTO_120MS);
-        TurnOffLED();
+         TurnOnLED();
+         EnableWDTAndSleep(WDTO_60MS);
+         TurnOffLED();
     }
 
     return 1;

@@ -1,15 +1,15 @@
 cmake_minimum_required(VERSION 3.20)
 
 
-set(MCUTYPE attiny13a)
-#set(MCUTYPE atmega328p)
+#set(MCUTYPE attiny13a)
+set(MCUTYPE atmega328p)
 include(./AVR8ToolChain.cmake)
 project(LeakageDetector)
 
 
 set(CMAKE_BUILD_TYPE Release)
 
-add_compile_definitions(F_CPU=1200000L)
+add_compile_definitions(F_CPU=16000000L)
 add_compile_definitions(BAUD=9600)
 include_directories("F:\\temp\\avr-libstdcpp-master\\include")
 
