@@ -10,6 +10,7 @@
 #define PIN_LED    PB5
 #define PIN_BUZZER PB4
 
+
 #define TurnOnLED()     (PORTB |= (1 << PIN_LED))    
 #define TurnOffLED()    (PORTB &= ~(1 << PIN_LED))   
 #define TurnOnBuzzer()  (PORTB |= (1 << PIN_BUZZER)) 
@@ -23,7 +24,6 @@ ISR(WDT_vect)
 void EnableWDTAndSleep(uint8_t timeout)
 {
     wdt_enable(timeout);
-    sei();
     _WD_CONTROL_REG |= _BV(WDIE);       // Enable WDT interrupt
     set_sleep_mode(SLEEP_MODE_PWR_DOWN); 
     sleep_enable();     
@@ -63,6 +63,7 @@ int main()
 
     wdt_reset();       
     power_all_disable(); 
+    sei();
 
     //Enable pull-up resistors on all pins to reduce power consumption during sleep
     PORTB = 0xFF;
